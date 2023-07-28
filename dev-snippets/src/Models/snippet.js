@@ -30,6 +30,10 @@ const SnippetSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    private: {
+        type: Boolean,
+        default: false,
+    },
 },
     {
         toJSON: {
