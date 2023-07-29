@@ -26,6 +26,7 @@ module.exports = {
 
     return req;
   },
+  //signToken will take the user object and sign it with the secret code and expiration time
   signToken: function ({ username, email, _id }) {
     const payload = { username, email, _id };
 
