@@ -5,6 +5,31 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   //the query will check to see if the user is logged in, if not it will throw an error
   Query: {
+users: async () => {
+        const userData = await User.find({})
+        .select("-__v -password")
+        .populate("snippets");
+        return userData;
+},
+user: async (parent, { username }) => {
+    if(context.user) {
+        const params = username ? { username } : {};
+        return await User.findOne(params)
+        .select("-__v -password")
+        .populate("snippets");
+    }
+    throw new AuthenticationError("You need to be logged in!");
+},
+snippets: async (parent, { username }) => {
+    const params = username ? { username } : {};
+    return await Snippet.find(params).sort({ createdAt: -1 });
+},
+snippet: async (parent, { _id }) => {
+    const params = _id ? { _id } : {};
+    return await Snippet.findOne(params);
+},
+
+    
     me: async (parent, args, context) => {
       if (context.user) {
         const userData = await User.findOne({ _id: context.user._id })
@@ -15,6 +40,7 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in");
     },
+    
   },
   //The Mutations for User will allow the user to login, add a user, and add a snippet
   Mutation: {
