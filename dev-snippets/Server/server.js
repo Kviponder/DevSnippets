@@ -1,3 +1,4 @@
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
@@ -21,14 +22,20 @@ app.engine('.handlebars', exphbs.engine({
 app.set('view engine', '.handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
+
 // Use the 'body-parser' middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve up static assets
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
 }
+
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/"));
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -49,6 +56,7 @@ app.use(applyAuthMiddleware);
 
 // Register your routes
 app.use(routes);
+
 
 // Create a new instance of an Apollo server with the GraphQL schema and context
 const server = new ApolloServer({
