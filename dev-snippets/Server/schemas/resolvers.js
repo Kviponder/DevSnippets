@@ -21,8 +21,9 @@ const resolvers = {
     //     }
     //     throw new AuthenticationError("You need to be logged in!");
     // },
-    user: async (parent, { username }) => {
-      if (context.user) {
+    user: async (parent, { username }, context) => {
+      // if (context.user) 
+      {
         const params = username ? { username } : {};
         return await User.findOne(params)
           .select("-__v -password")
@@ -74,7 +75,8 @@ const resolvers = {
     },
     //Replace comment here
     addSnippet: async (parent, args, context) => {
-      if (context.user) {
+      if (context.user) 
+      {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { snippets: args } },
