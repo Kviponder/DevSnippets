@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new Schema(
   {
@@ -35,6 +36,15 @@ const UserSchema = new Schema(
 );
 //  ideas for virtuals:
 // UserSchema.virtual("snippetCount").get(function () {}
+
+// Add the comparePassword method to the userSchema
+UserSchema.methods.comparePassword = async function (password) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    throw new Error('Error comparing passwords');
+  }
+};
 
 const User = model("User", UserSchema);
 module.exports = User;
