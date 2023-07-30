@@ -1,0 +1,8 @@
+# Ignore node_modules in the root directory
+/dev-snippets/node_modules
+
+# Ignore node_modules in the Client directory
+/dev-snippets/Client/node_modules
+
+# Ignore node_modules in the Server directory
+/dev-snippets/Server/node_modules
