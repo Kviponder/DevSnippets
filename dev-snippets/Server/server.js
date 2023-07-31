@@ -13,7 +13,6 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: authMiddleware,
 });
 
 app.use(express.urlencoded({ extended: false }));
@@ -33,6 +32,7 @@ const startApolloServer = async () => {
   server.applyMiddleware({ app });
   
   db.once("open", () => {
+    console.log("MongoDB connected");
     app.listen(PORT, () => {
       console.log(`API server running on port http://localhost:${PORT}`);
       console.log(
