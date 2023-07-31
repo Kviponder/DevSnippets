@@ -21,3 +21,13 @@ export const QUERY_ME = gql`
     }
   }
 `;
+
+export const ADD_USER = gql`
+mutation Mutation($username: String!, $email: String!, $password: String!) {
+  addUser(username: $username, email: $email, password: $password) {
+    email
+    password
+    username
+  }
+}
+`;

@@ -42,23 +42,48 @@ const resolvers = {
   },
   Mutation: {
     addUser: async (parent, args) => {
-      const user = await User.create(args);
-      return { user };
+      // Ensure that all required fields are provided in the arguments
+      const { username, email, password } = args;
+      if (!username || !email || !password) {
+        throw new Error("Username, email, and password are required.");
+      }
+
+      try {
+        // Check if a user with the same email already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          throw new Error("User with this email already exists.");
+        }
+
+        // Create the new user
+        const newUser = await User.create(args);
+        return newUser;
+      } catch (error) {
+        throw new Error("Could not create user. Please try again.");
+      }
     },
     login: async (parent, { email, password }) => {
-      // Since we are removing authentication, we won't actually log in the user.
+      // Removed authentication, as it is not required anymore.
       // Instead, we'll just create a new user object with the provided email and a placeholder username.
       const user = { _id: "placeholderId", username: "Guest" };
       return { user };
     },
     addSnippet: async (parent, args) => {
-      // Since we are removing authentication, we'll create a new snippet without associating it with any user.
+      // Removed authentication, as it is not required anymore.
+      // Create a new snippet without associating it with any user.
       const newSnippet = await Snippet.create(args);
       return newSnippet;
     },
-    removeSnippet: async (parent, { snippetId }) => {
-      // Since we are removing authentication, we'll remove the snippet without any user association.
-      const deletedSnippet = await Snippet.findByIdAndDelete(snippetId);
+    updateSnippet: async (parent, args) => {
+      // If you have an updateSnippet resolver, you can remove the authentication from it too.
+      // Update the snippet using args and return the updated snippet.
+      const updatedSnippet = await Snippet.findByIdAndUpdate(args._id, args, { new: true });
+      return updatedSnippet;
+    },
+    removeSnippet: async (parent, { _id }) => {
+      // Removed authentication, as it is not required anymore.
+      // Remove the snippet without any user association.
+      const deletedSnippet = await Snippet.findByIdAndDelete(_id);
       return deletedSnippet;
     },
   },

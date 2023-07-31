@@ -4,7 +4,6 @@ import { QUERY_ME } from '../utils/queries';
 
 const SnippetList = () => {
   const { loading, data } = useQuery(QUERY_ME);
-  console.log(data);
   const userData = data || {};
   const snippets = userData.me ? userData.me.snippets : [];
 
