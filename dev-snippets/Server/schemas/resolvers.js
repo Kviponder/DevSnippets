@@ -2,6 +2,7 @@ const { AuthenticationError } = require("apollo-server-express");
 const { User, Snippet } = require("../models");
 const { signToken } = require("../utils/auth");
 
+
 const resolvers = {
   Query: {
     users: async () => {
@@ -10,14 +11,11 @@ const resolvers = {
         .populate("snippets");
       return userData;
     },
-    user: async (parent, { username }, context) => {
-      if (context.user) {
-        const params = username ? { username } : {};
-        return await User.findOne(params)
-          .select("-__v -password")
-          .populate("snippets");
-      }
-      throw new AuthenticationError("You need to be logged in!");
+    user: async (parent, { username }) => {
+      const params = username ? { username } : {};
+      return await User.findOne(params)
+        .select("-__v -password")
+        .populate("snippets");
     },
     snippets: async (parent, { username }) => {
       const params = username ? { username } : {};
@@ -27,57 +25,41 @@ const resolvers = {
       const params = _id ? { _id } : {};
       return await Snippet.findOne(params);
     },
-    me: async (parent, args, context) => {
-      if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id })
-          .select("-__v -password")
-          .populate("snippets");
+    me: async () => {
+      try {
+        // Fetch all snippets from the database
+        const snippets = await Snippet.find();
 
-        return userData;
+        // Return an object with the snippets data
+        return {
+          snippets,
+        };
+      } catch (error) {
+        // Handle any potential errors
+        throw new Error("An error occurred while fetching snippets.");
       }
-      throw new AuthenticationError("Not logged in");
     },
   },
   Mutation: {
     addUser: async (parent, args) => {
       const user = await User.create(args);
-      const token = signToken(user);
-
-      return { token, user };
+      return { user };
     },
     login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
-      if (!user) {
-        throw new AuthenticationError("Incorrect credentials");
-      }
-      const correctPw = await user.comparePassword(password); // Use the comparePassword method defined in the User model
-      if (!correctPw) {
-        throw new AuthenticationError("Incorrect credentials");
-      }
-      const token = signToken(user);
-      return { token, user };
+      // Since we are removing authentication, we won't actually log in the user.
+      // Instead, we'll just create a new user object with the provided email and a placeholder username.
+      const user = { _id: "placeholderId", username: "Guest" };
+      return { user };
     },
-    addSnippet: async (parent, args, context) => {
-      if (context.user) {
-        const updatedUser = await User.findByIdAndUpdate(
-          { _id: context.user._id },
-          { $push: { snippets: args } },
-          { new: true }
-        );
-        return updatedUser;
-      }
-      throw new AuthenticationError("You need to be logged in!");
+    addSnippet: async (parent, args) => {
+      // Since we are removing authentication, we'll create a new snippet without associating it with any user.
+      const newSnippet = await Snippet.create(args);
+      return newSnippet;
     },
-    removeSnippet: async (parent, { snippetId }, context) => {
-      if (context.user) {
-        const updatedUser = await User.findByIdAndUpdate(
-          { _id: context.user._id },
-          { $pull: { snippets: { snippetId } } },
-          { new: true }
-        );
-        return updatedUser;
-      }
-      throw new AuthenticationError("You need to be logged in!");
+    removeSnippet: async (parent, { snippetId }) => {
+      // Since we are removing authentication, we'll remove the snippet without any user association.
+      const deletedSnippet = await Snippet.findByIdAndDelete(snippetId);
+      return deletedSnippet;
     },
   },
 };
