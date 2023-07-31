@@ -27,6 +27,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/"));
 });
 
+
 const startApolloServer = async () => {
   await server.start();
   server.applyMiddleware({ app });
