@@ -20,11 +20,6 @@ const typeDefs = gql`
         private: Boolean
     }
 
-    type Auth {
-        token: ID!
-        user: User
-    }
-
     type Query {
         users: [User]
         user(username: String!): User
@@ -34,12 +29,12 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        addUser(username: String!, email: String!, password: String!): Auth
-        login(email: String!, password: String!): Auth
+        addUser(username: String!, email: String!, password: String!): User
+        login(email: String!, password: String!): User
         addSnippet(title: String!, description: String!, code: String!, language: String!, tags: String!, private: Boolean): Snippet
         updateSnippet(_id: ID!, title: String!, description: String!, code: String!, language: String!, tags: String!, private: Boolean): Snippet
         removeSnippet(_id: ID!): Snippet
-    }
+    }    
 `;
 
 module.exports = typeDefs;

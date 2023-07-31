@@ -1,60 +1,81 @@
 import React, { useState } from 'react';
-import API from '../utils/API';
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/queries';
 
 const SignupForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
+  const [addUser, { error }] = useMutation(ADD_USER);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     try {
-      // Send a POST request to the signup route with the signup data
-      const response = await API.post('/users/signup', { username, password });
+      // Call the ADD_USER mutation with the form data
+      const { data } = await addUser({
+        variables: { ...formData },
+      });
 
-      if (response.status === 200) {
-        // If the signup is successful, clear the form and display a success message
-        setUsername('');
-        setPassword('');
-        setErrorMessage('Signup successful! Please login.');
-      }
+      // Handle the response, such as displaying success messages or redirecting the user
+      console.log('User created:', data.addUser);
+
+      // Reset the form after successful submission
+      setFormData({ username: '', email: '', password: '' });
     } catch (error) {
-      // If there's an error, display the error message
-      setErrorMessage('Error during signup. Please try again.');
-      console.error('Error during signup:', error);
+      // Handle any errors that occur during the mutation
+      console.error('Error creating user:', error.message);
     }
   };
 
   return (
-    <div>
-      <h2>Signup</h2>
-      <form onSubmit={handleSignup}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <button type="submit">Signup</button>
-        </div>
-        {errorMessage && <p>{errorMessage}</p>}
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        {error && <p>{error.message}</p>}
+        <button type="submit">Sign Up</button>
+      </div>
+    </form>
   );
 };
 

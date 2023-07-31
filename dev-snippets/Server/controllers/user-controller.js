@@ -32,9 +32,9 @@ module.exports = {
       }
 
       // Generate a token for the newly created user
-      const token = signToken(user);
+      // const token = signToken(user);
 
-      res.json({ user, token });
+      res.json({ user });
     } catch (error) {
       console.error('Error creating user:', error);
       return res.status(500).json({ message: 'Internal server error' });
