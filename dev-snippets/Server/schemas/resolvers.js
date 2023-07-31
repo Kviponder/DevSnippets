@@ -3,6 +3,7 @@ const { User, Snippet } = require("../models");
 const { signToken } = require("../utils/auth");
 
 
+
 const resolvers = {
   Query: {
     users: async () => {
@@ -43,13 +44,28 @@ const resolvers = {
   Mutation: {
     addUser: async (parent, args) => {
       const user = await User.create(args);
-      return { user };
+      const token=signToken(user)
+      return { token, user };
+
     },
     login: async (parent, { email, password }) => {
       // Since we are removing authentication, we won't actually log in the user.
       // Instead, we'll just create a new user object with the provided email and a placeholder username.
-      const user = { _id: "placeholderId", username: "Guest" };
-      return { user };
+      const user = await User.findOne({
+        email
+      })
+      if (!user) {
+        throw new AuthenticationError('Incorrect credentials');
+      }
+
+      const correctPw = await user.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw new AuthenticationError('Incorrect credentials');
+      }
+
+      const token = signToken(user);
+      return { token, user };
     },
     addSnippet: async (parent, args) => {
       // Since we are removing authentication, we'll create a new snippet without associating it with any user.
