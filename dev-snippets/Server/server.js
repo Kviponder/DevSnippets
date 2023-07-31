@@ -33,6 +33,7 @@ const startApolloServer = async () => {
   server.applyMiddleware({ app });
   
   db.once("open", () => {
+    console.log("MongoDB connected");
     app.listen(PORT, () => {
       console.log(`API server running on port http://localhost:${PORT}`);
       console.log(
