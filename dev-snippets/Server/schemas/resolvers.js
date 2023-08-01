@@ -25,10 +25,15 @@ const resolvers = {
       const params = _id ? { _id } : {};
       return await Snippet.findOne(params);
     },
-    me: async () => {
+    me: async (parent, args, context) => {
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new AuthenticationError("Authentication required.");
+      }
+
       try {
-        // Fetch all snippets from the database
-        const snippets = await Snippet.find();
+        // Fetch all snippets from the database that belong to the authenticated user
+        const snippets = await Snippet.find({ user: context.user._id });
 
         // Return an object with the snippets data
         return {
@@ -43,6 +48,7 @@ const resolvers = {
   Mutation: {
     addUser: async (parent, args) => {
       // Ensure that all required fields are provided in the arguments
+      console.log("Hellooo");
       const { username, email, password } = args;
       if (!username || !email || !password) {
         throw new Error("Username, email, and password are required.");
@@ -63,10 +69,25 @@ const resolvers = {
       }
     },
     login: async (parent, { email, password }) => {
-      // Removed authentication, as it is not required anymore.
-      // Instead, we'll just create a new user object with the provided email and a placeholder username.
-      const user = { _id: "placeholderId", username: "Guest" };
-      return { user };
+      // Check if a user with the provided email exists in the database
+      const user = await User.findOne({ email });
+      console.log(email, password); // Add this line for debugging
+      console.log(user); // Add this line for debugging
+    
+      if (!user) {
+        throw new AuthenticationError('Invalid email');
+      }
+      // Check if the provided password matches the user's password
+
+      const validPassword = await user.comparePassword(password);
+      console.log(validPassword);
+      if (!validPassword) {
+        throw new AuthenticationError('Invalid password');
+      }
+
+      // If the email and password are valid, sign a JWT token and return it along with the user data
+      const token = signToken(user);
+      return { token, user };
     },
     addSnippet: async (parent, args) => {
       // Removed authentication, as it is not required anymore.

@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
 const bcrypt = require('bcryptjs');
+const { Schema, model } = require("mongoose");
 
 const UserSchema = new Schema(
   {
@@ -18,7 +18,7 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: "Password is required",
-      validate: [({ length }) => length >= 6, "Password should be longer."],
+      minlength: [6, "Password should be at least 6 characters long."],
     },
     snippets: [
       {
@@ -34,11 +34,23 @@ const UserSchema = new Schema(
     id: false,
   }
 );
-//  ideas for virtuals:
-// UserSchema.virtual("snippetCount").get(function () {}
 
-// Add the comparePassword method to the userSchema
+// Add the pre-save hook to hash the password before saving it to the database
+UserSchema.pre('save', async function (next) {
+  if (this.isModified('password') || this.isNew) {
+    try {
+      this.password = await bcrypt.hash(this.password, 10);
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
+});
+
+// Add the comparePassword method to the UserSchema
 UserSchema.methods.comparePassword = async function (password) {
+  console.log(password + " first one");
+  console.log(this.password + " second one");
   try {
     return await bcrypt.compare(password, this.password);
   } catch (error) {
