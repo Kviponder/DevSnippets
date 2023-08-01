@@ -4,6 +4,8 @@ import Home from './components/Home';
 import SnippetList from './components/SnippetList';
 import SignupForm from './components/SignupForm';
 import Header from './components/header';
+import Footer from './components/Footer';
+
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
         <Route path="/snippets" element={<SnippetList />} />
         <Route path="/signup" element={<SignupForm />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }
