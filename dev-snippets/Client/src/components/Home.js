@@ -15,8 +15,6 @@ function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add your login logic here, such as sending the data to a server for authentication
-    console.log('Username:', username);
-    console.log('Password:', password);
   };
 
   return (
