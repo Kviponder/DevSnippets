@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 
 const client = new ApolloClient({
@@ -14,3 +15,5 @@ ReactDOM.render(
   </ApolloProvider>,
   document.getElementById('root')
 );
+
+export default client;
