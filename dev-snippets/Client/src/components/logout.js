@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import Auth from '../utils/auth';
+import '../styles.css'; // Import the styles.css file
 
 const Logout = () => {
   const handleLogout = () => {
@@ -9,7 +10,7 @@ const Logout = () => {
   };
 
   return (
-    <Button variant="danger" onClick={handleLogout}>
+    <Button variant="gold" className="logout-button" onClick={handleLogout}>
       Logout
     </Button>
   );

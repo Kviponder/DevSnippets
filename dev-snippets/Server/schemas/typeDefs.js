@@ -31,13 +31,13 @@ const typeDefs = gql`
     snippet(_id: ID!): Snippet
     me: User
   }
-    type Mutation {
-        addUser(username: String!, email: String!, password: String!): User
-        login(email: String!, password: String!): AuthPayload
-        addSnippet(title: String!, description: String!, code: String!, language: String!, tags: String!, private: Boolean): Snippet
-        updateSnippet(_id: ID!, title: String!, description: String!, code: String!, language: String!, tags: String!, private: Boolean): Snippet
-        removeSnippet(_id: ID!): Snippet
-    }    
+  type Mutation {
+    addUser(username: String!, email: String!, password: String!): User
+    login(email: String!, password: String!): AuthPayload
+    addSnippet(title: String!, description: String!, code: String!, language: String!, tags: String!, private: Boolean): Snippet
+    updateSnippet(_id: ID!, title: String!, description: String!, code: String!, language: String!, tags: String!, private: Boolean): Snippet
+    removeSnippet(_id: ID!): Snippet
+  }  
 `;
 
 module.exports = typeDefs;

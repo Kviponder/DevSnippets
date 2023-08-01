@@ -7,12 +7,16 @@ import Home from './components/Home';
 import SnippetList from './components/SnippetList';
 import SignupForm from './components/SignupForm';
 import LoginForm from './components/LoginForm';
+import Navbar from './components/Navbar';
+import './styles.css';
+
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider prefixes={{ btn: 'custom-btn' }}>
         <Router>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/snippets" element={<SnippetList />} />

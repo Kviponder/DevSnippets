@@ -89,11 +89,22 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    addSnippet: async (parent, args) => {
-      // Removed authentication, as it is not required anymore.
-      // Create a new snippet without associating it with any user.
-      const newSnippet = await Snippet.create(args);
-      return newSnippet;
+    addSnippet: async (parent, args, context) => {
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new AuthenticationError("Authentication required.");
+      }
+
+      try {
+        // Associate the snippet with the authenticated user using the user's ID
+        args.user = context.user._id;
+
+        // Create the new snippet
+        const newSnippet = await Snippet.create(args);
+        return newSnippet;
+      } catch (error) {
+        throw new Error("Could not create snippet. Please try again.");
+      }
     },
     updateSnippet: async (parent, args) => {
       // If you have an updateSnippet resolver, you can remove the authentication from it too.

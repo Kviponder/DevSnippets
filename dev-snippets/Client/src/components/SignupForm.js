@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/queries';
+import { Button, Form, Alert } from 'react-bootstrap'; // Import Button, Form, and Alert from react-bootstrap
+import '../styles.css'; // Import the styles.css file
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -37,45 +39,42 @@ const SignupForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
+    <Form className="signup-form" onSubmit={handleSubmit}>
+      <Form.Group controlId="username">
+        <Form.Label>Username</Form.Label>
+        <Form.Control
           type="text"
-          id="username"
           name="username"
           value={formData.username}
           onChange={handleChange}
           required
         />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
+      </Form.Group>
+      <Form.Group controlId="email">
+        <Form.Label>Email</Form.Label>
+        <Form.Control
           type="email"
-          id="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
           required
         />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
+      </Form.Group>
+      <Form.Group controlId="password">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
           type="password"
-          id="password"
           name="password"
           value={formData.password}
           onChange={handleChange}
           required
         />
-      </div>
-      <div>
-        {error && <p>{error.message}</p>}
-        <button type="submit">Sign Up</button>
-      </div>
-    </form>
+      </Form.Group>
+      {error && <Alert variant="danger">{error.message}</Alert>}
+      <Button type="submit" variant="gold" className="signup-button">
+        Sign Up
+      </Button>
+    </Form>
   );
 };
 
