@@ -6,8 +6,6 @@ import client from './index'; // Import your Apollo Client instance
 import Home from './components/Home';
 import SnippetList from './components/SnippetList';
 import SignupForm from './components/SignupForm';
-import Header from './components/header';
-import Footer from './components/Footer';
 import LoginForm from './components/LoginForm';
 
 function App() {

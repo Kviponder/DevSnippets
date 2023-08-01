@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'; // Make sure useContext is imported from 'react'
-import { Form, Button, Alert } from 'react-bootstrap';
+import React, { useState } from 'react'; // Make sure useContext is imported from 'react'
+import { Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/queries';
 import Auth from '../utils/auth';
@@ -9,7 +9,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
-  const [loginUser, { loading, error }] = useMutation(LOGIN_USER);
+  const [loginUser, { loading }] = useMutation(LOGIN_USER);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
