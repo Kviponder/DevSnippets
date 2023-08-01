@@ -1,46 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
+import '../styles.css'; // Import the styles.css file
 
 function Home() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your login logic here, such as sending the data to a server for authentication
-  };
-
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={handleUsernameChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+    <div className="home-container">
+      <div className="home-content">
+        <h1 className="home-title">Welcome to DevSnippets</h1>
+        <p className="home-subtitle">Your one-stop solution for saving code snippets!</p>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,268 @@
+:root {
+    --black: #000000;
+    --gold: #ffd700;
+  }
+  
+  body {
+    background-color: var(--black);
+    color: var(--gold);
+  }
+  
+  .button {
+    background-color: var(--gold);
+    color: var(--black);
+    /* Add any other styles as needed */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+/* styles.css */
+
+/* Container for the homepage */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--black);
+  color: var(--gold);
+}
+
+/* Content area within the container */
+.home-content {
+  text-align: center;
+}
+
+/* Title styling */
+.home-title {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+/* Subtitle styling */
+.home-subtitle {
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+/* styles.css */
+
+/* Navbar styling */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--black);
+  color: var(--gold);
+}
+
+/* Logo styling */
+.logo a {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--gold);
+  text-decoration: none;
+}
+
+/* Navigation links styling */
+.nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links li {
+  margin-right: 1rem;
+}
+
+/* Nav link styling */
+.nav-link {
+  font-size: 1.2rem;
+  color: var(--gold);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffd200; /* Change to a lighter gold color on hover */
+}
+
+/* styles.css */
+
+/* Login form container styling */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: var(--black);
+  color: var(--gold);
+}
+
+/* Login title styling */
+.login-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+/* Login form styling */
+.login-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Login button styling */
+.login-button {
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+}
+
+/* Form field styling */
+.form-group label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--gold);
+}
+
+.form-control {
+  font-size: 1rem;
+  background-color: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+}
+
+.form-control:focus {
+  border-color: #ffd200; /* Change to a lighter gold color on focus */
+}
+
+/* styles.css */
+
+/* Logout button styling */
+.logout-button {
+  font-size: 1.2rem;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  padding: 0.5rem 1rem;
+}
+
+.logout-button:hover {
+  background-color: var(--gold);
+  color: var(--black);
+}
+
+/* styles.css */
+
+/* Signup form container styling */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: var(--black);
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Form field styling */
+.form-group label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  font-size: 1rem;
+  background-color: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.form-control:focus {
+  border-color: #ffd200; /* Change to a lighter gold color on focus */
+}
+
+/* Error message styling */
+.alert {
+  margin-bottom: 1rem;
+  background-color: #721c24; /* Dark red color for error message */
+  color: #f8d7da; /* Light red color for text */
+  border-color: #721c24;
+  border-radius: 5px;
+  padding: 0.75rem;
+  width: 100%;
+  text-align: center;
+}
+
+/* Signup button styling */
+.signup-button {
+  background-color: var(--black);
+  font-size: 1.2rem;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.signup-button:hover {
+  background-color: var(--gold);
+  color: var(--black);
+}
+
+/* styles.css */
+
+/* SnippetList container styling */
+.snippet-list {
+  background-color: var(--black);
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Snippet item styling */
+.snippet-item {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid var(--gold);
+  border-radius: 5px;
+}
+
+/* Title styling */
+.snippet-item h4 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--gold);
+}
+
+/* Description styling */
+.snippet-item p {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Language styling */
+.snippet-item p:nth-child(3) {
+  font-size: 1.1rem;
+}
+
+/* Code block styling */
+.snippet-item pre {
+  background-color: var(--gold);
+  color: var(--black);
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}

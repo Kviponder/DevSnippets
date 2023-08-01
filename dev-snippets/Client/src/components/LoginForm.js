@@ -1,8 +1,9 @@
-import React, { useState } from 'react'; // Make sure useContext is imported from 'react'
-import { Button, Alert } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Alert, Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/queries';
 import Auth from '../utils/auth';
+import '../styles.css'; // Import the styles.css file
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -48,34 +49,37 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
-      <h1>Welcome to the Login Page</h1>
-      <form onSubmit={handleFormSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
+    <div className="login-container">
+      <h1 className="login-title">Welcome to the Login Page</h1>
+      <Form className="login-form" onSubmit={handleFormSubmit}>
+        <Form.Group controlId="email">
+          <Form.Label>Email:</Form.Label>
+          <Form.Control
             type="text"
-            id="email"
             value={email}
             onChange={handleEmailChange}
             required
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
+        </Form.Group>
+        <Form.Group controlId="password">
+          <Form.Label>Password:</Form.Label>
+          <Form.Control
             type="password"
-            id="password"
             value={password}
             onChange={handlePasswordChange}
             required
           />
-        </div>
+        </Form.Group>
         {showAlert && <Alert variant="danger">Invalid credentials!</Alert>}
-        <Button type="submit" disabled={loading}>
+        <Button
+          type="submit"
+          variant="gold"
+          className="login-button"
+          disabled={loading}
+        >
           {loading ? 'Logging in...' : 'Login'}
         </Button>
-      </form>
+      </Form>
     </div>
   );
 };
