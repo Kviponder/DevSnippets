@@ -6,9 +6,9 @@ import '../styles.css'; // Import the styles.css file
 
 const SnippetList = () => {
   const { loading, data } = useQuery(QUERY_ME);
-  const userData = data || {};
-  const user = userData.me;
-  const snippets = user ? user.snippets : [];
+  const userData = data ? data.me : {};
+  const user = userData;
+  const snippets = user ? user.snippets || [] : [];
 
   const [currentAction, setCurrentAction] = useState(null); // "add", "update", or null
   const [formData, setFormData] = useState({

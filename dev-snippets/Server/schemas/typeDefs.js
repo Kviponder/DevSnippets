@@ -14,7 +14,7 @@ const typeDefs = gql`
     description: String!
     code: String!
     language: String!
-    tags: String!
+    tags: String
     user: User
     private: Boolean
   }
@@ -34,7 +34,7 @@ const typeDefs = gql`
   type Mutation {
     addUser(username: String!, email: String!, password: String!): User
     login(email: String!, password: String!): AuthPayload
-    addSnippet(title: String!, description: String!, code: String!, language: String!, tags: String!, private: Boolean): Snippet
+    addSnippet(title: String!, description: String!, code: String!, language: String!, tags: String, private: Boolean): Snippet
     updateSnippet(_id: ID!, title: String!, description: String!, code: String!, language: String!, tags: String!, private: Boolean): Snippet
     removeSnippet(_id: ID!): Snippet
   }  

@@ -5,18 +5,15 @@ export const QUERY_ME = gql`
     me {
       snippets {
         _id
-        code
-        description
-        language
-        private
-        tags
         title
+        description
+        code
+        language
+        tags
         user {
           _id
-          email
-          password
-          username
         }
+        private
       }
     }
   }
@@ -45,7 +42,7 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_SNIPPET = gql`
-  mutation AddSnippet($title: String!, $description: String!, $code: String!, $language: String!, $tags: String!, $private: Boolean!) {
+  mutation AddSnippet($title: String!, $description: String!, $code: String!, $language: String!, $tags: String, $private: Boolean) {
     addSnippet(title: $title, description: $description, code: $code, language: $language, tags: $tags, private: $private) {
       _id
       title
@@ -89,7 +86,3 @@ export const UPDATE_SNIPPET = gql`
     }
   }
 `;
-
-
-
-
