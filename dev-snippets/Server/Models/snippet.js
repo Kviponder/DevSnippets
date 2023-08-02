@@ -24,7 +24,6 @@ const SnippetSchema = new Schema(
     },
     tags: {
       type: String,
-      required: "Tags are required",
       trim: true,
     },
     user: {

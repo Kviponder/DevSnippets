@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import './styles.css';
 
 
+
 function App() {
   return (
     <ApolloProvider client={client}>

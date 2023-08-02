@@ -24,6 +24,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
+      console.log(email + " " + password);
       const { data } = await loginUser({
         variables: {
           email: email,

@@ -48,7 +48,6 @@ const resolvers = {
   Mutation: {
     addUser: async (parent, args) => {
       // Ensure that all required fields are provided in the arguments
-      console.log("Hellooo");
       const { username, email, password } = args;
       if (!username || !email || !password) {
         throw new Error("Username, email, and password are required.");
@@ -71,8 +70,6 @@ const resolvers = {
     login: async (parent, { email, password }) => {
       // Check if a user with the provided email exists in the database
       const user = await User.findOne({ email });
-      console.log(email, password); // Add this line for debugging
-      console.log(user); // Add this line for debugging
     
       if (!user) {
         throw new AuthenticationError('Invalid email');
@@ -80,7 +77,6 @@ const resolvers = {
       // Check if the provided password matches the user's password
 
       const validPassword = await user.comparePassword(password);
-      console.log(validPassword);
       if (!validPassword) {
         throw new AuthenticationError('Invalid password');
       }
@@ -98,7 +94,6 @@ const resolvers = {
       try {
         // Associate the snippet with the authenticated user using the user's ID
         args.user = context.user._id;
-
         // Create the new snippet
         const newSnippet = await Snippet.create(args);
         return newSnippet;
