@@ -9,11 +9,14 @@ const Navbar = () => {
     Auth.logout(); // Remove the JWT token from local storage
     window.location.replace('/'); // Redirect the user to the homepage or login page
   };
+  const sendToGithub = (externalLink) =>{
+    window.location.href = externalLink
+  }; //Roberts Code
 
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/">DevSnippets</Link>
+        <div onClick={() => sendToGithub("https://github.com/")}>DevSnippets</div> 
       </div>
       <ul className="nav-links">
         <li>
