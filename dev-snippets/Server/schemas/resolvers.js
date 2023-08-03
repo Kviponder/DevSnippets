@@ -111,8 +111,9 @@ const resolvers = {
       // Removed authentication, as it is not required anymore.
       // Remove the snippet without any user association.
       const deletedSnippet = await Snippet.findByIdAndDelete(_id);
-      return deletedSnippet;
+      return deletedSnippet ? { _id: deletedSnippet._id } : null;
     },
+    
   },
 };
 
