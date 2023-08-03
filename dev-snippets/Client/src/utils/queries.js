@@ -67,7 +67,7 @@ export const DELETE_SNIPPET = gql`
 `;
 
 export const UPDATE_SNIPPET = gql`
-  mutation UpdateSnippet($snippetId: ID!, $title: String!, $description: String!, $code: String!, $language: String!, $tags: String!, $private: Boolean!) {
+  mutation UpdateSnippet($snippetId: ID!, $title: String!, $description: String!, $code: String!, $language: String!, $tags: String, $private: Boolean) {
     updateSnippet(_id: $snippetId, title: $title, description: $description, code: $code, language: $language, tags: $tags, private: $private) {
       _id
       title
