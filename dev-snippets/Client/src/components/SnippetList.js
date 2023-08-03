@@ -204,32 +204,102 @@ const SnippetList = () => {
                   </div>
 
                   <div className="fancyButtons">
-                    <Button
-                      variant="primary"
-                      onClick={() => handleEditSnippet(snippet)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="danger"
-                      onClick={() => handleDeleteSnippet(snippet._id)}
-                    >
-                      Delete
-                    </Button>
-                    <Button
-                      variant="info"
-                      onClick={() => handleCopySnippet(snippet._id)}
-                    >
-                      {copiedSnippetId === snippet._id ? "Copied" : "Copy"}
-                    </Button>
+                    {currentAction === "update" ? ( // Conditionally render the form when updating a snippet
+                      <form className="form-container" onSubmit={handleSubmit}>
+                        <div>
+                          <label htmlFor="title">Title</label>
+                          <input
+                            type="text"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="description">Description</label>
+                          <input
+                            type="text"
+                            name="description"
+                            value={formData.description}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="language">Language</label>
+                          <select
+                            name="language"
+                            value={formData.language}
+                            onChange={handleInputChange}
+                          >
+                            <option value="">Select a language</option>
+                            {commonLanguages.map((lang) => (
+                              <option key={lang} value={lang}>
+                                {lang}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="tags">Tags</label>
+                          <input
+                            type="text"
+                            name="tags"
+                            value={formData.tags}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="code">Code</label>
+                          <textarea
+                            name="code"
+                            value={formData.code}
+                            onChange={handleInputChange}
+                            rows={10}
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="private">Private</label>
+                          <input
+                            type="checkbox"
+                            name="private"
+                            checked={formData.private}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <Button type="submit">Submit</Button>
+                      </form>
+                    ) : (
+                      <>
+                        <Button
+                          variant="primary"
+                          onClick={() => handleEditSnippet(snippet)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDeleteSnippet(snippet._id)}
+                        >
+                          Delete
+                        </Button>
+                        <Button
+                          variant="info"
+                          onClick={() => handleCopySnippet(snippet._id)}
+                        >
+                          {copiedSnippetId === snippet._id ? "Copied" : "Copy"}
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </li>
               );
             })
           )}
         </ul>
-      )}
-
+      )}{" "}
       {currentAction === "add" ? ( // Conditionally render the form when adding a snippet
         <form className="form-container" onSubmit={handleSubmit}>
           <div>
@@ -307,65 +377,8 @@ const SnippetList = () => {
         >
           Add Snippet
         </Button>
-      )}, {currentAction === "update" ? ( // Conditionally render the form when updating a snippet
-        <form className="form-container" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="title">Title</label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="description">Description</label>
-            <input
-
-              type="text"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="language">Language</label>
-            <select
-
-              name="language"
-              value={formData.language}
-              onChange={handleInputChange}
-            >
-              <option value="">Select a language</option>
-              {commonLanguages.map((lang) => (
-                <option key={lang} value={lang}>
-                  {lang}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="tags">Tags</label>
-            <input type="text" name="tags" value={formData.tags} onChange={handleInputChange} />
-          </div>
-
-          <div>
-            <label htmlFor="code">Code</label>
-            <textarea name="code" value={formData.code} onChange={handleInputChange} rows={10} />
-          </div>
-
-          <div>
-            <label htmlFor="private">Private</label>
-            <input type="checkbox" name="private" checked={formData.private} onChange={handleInputChange} />
-          </div>
-          <Button type="submit">Submit</Button>
-        </form>
-      ) : (
-        <h1> Hello</h1>
       )}
     </div>
-
   );
 };
 
