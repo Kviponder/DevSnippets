@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/queries';
-import { Button, Form, Alert } from 'react-bootstrap'; // Import Button, Form, and Alert from react-bootstrap
+import { Button, Form, Alert } from 'react-bootstrap';
 import '../styles.css'; // Import the styles.css file
 
 const SignupForm = () => {
@@ -23,12 +23,9 @@ const SignupForm = () => {
 
     try {
       // Call the ADD_USER mutation with the form data
-      const { data } = await addUser({
+      await addUser({
         variables: { ...formData },
       });
-
-      // Handle the response, such as displaying success messages or redirecting the user
-      console.log('User created:', data.addUser);
 
       // Reset the form after successful submission
       setFormData({ username: '', email: '', password: '' });
@@ -39,42 +36,48 @@ const SignupForm = () => {
   };
 
   return (
-    <Form className="signup-form" onSubmit={handleSubmit}>
-      <Form.Group controlId="username">
-        <Form.Label>Username</Form.Label>
-        <Form.Control
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group controlId="email">
-        <Form.Label>Email</Form.Label>
-        <Form.Control
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </Form.Group>
-      <Form.Group controlId="password">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-      </Form.Group>
-      {error && <Alert variant="danger">{error.message}</Alert>}
-      <Button type="submit" variant="gold" className="signup-button">
-        Sign Up
-      </Button>
-    </Form>
+    <div className="signup-container">
+      <h1 className="signup-title">Sign Up</h1>
+      <Form className="signup-form" onSubmit={handleSubmit}>
+        <Form.Group controlId="username">
+          <Form.Label className="form-label">Username</Form.Label>
+          <Form.Control
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            required
+            className="form-control"
+          />
+        </Form.Group>
+        <Form.Group controlId="email">
+          <Form.Label className="form-label">Email</Form.Label>
+          <Form.Control
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="form-control"
+          />
+        </Form.Group>
+        <Form.Group controlId="password">
+          <Form.Label className="form-label">Password</Form.Label>
+          <Form.Control
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="form-control"
+          />
+        </Form.Group>
+        {error && <Alert variant="danger" className="alert-danger">{error.message}</Alert>}
+        <Button type="submit" variant="gold" className="signup-button">
+          Sign Up
+        </Button>
+      </Form>
+    </div>
   );
 };
 

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_ME, ADD_SNIPPET, DELETE_SNIPPET, UPDATE_SNIPPET } from '../utils/queries';
-import { Alert, Button } from 'react-bootstrap'; // Import Alert and Button from react-bootstrap
-import '../styles.css'; // Import the styles.css file
+import { Alert, Button } from 'react-bootstrap';
+import '../styles.css';
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/hljs'; // Choose the style you prefer
+import { commonLanguages } from '../utils/languages';
 
 const SnippetList = () => {
   const { loading, data } = useQuery(QUERY_ME);
@@ -10,12 +13,19 @@ const SnippetList = () => {
   const user = userData;
   const snippets = user ? user.snippets || [] : [];
 
-  const [currentAction, setCurrentAction] = useState(null); // "add", "update", or null
+  // Function to split the tags string into an array of tags
+  const splitTags = (tags) => {
+    return tags.split(',').map((tag) => tag.trim());
+  };
+
+  const [currentAction, setCurrentAction] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     language: '',
     code: '',
+    tags: '',
+    private: false,
   });
 
   const [addSnippet] = useMutation(ADD_SNIPPET, {
@@ -23,31 +33,49 @@ const SnippetList = () => {
       cache.modify({
         fields: {
           me(existingRef = []) {
+            if (!Array.isArray(existingRef)) {
+              existingRef = [];
+            }
             return [...existingRef, addSnippet];
           },
         },
       });
     },
+    refetchQueries: [{ query: QUERY_ME }],
   });
 
   const [deleteSnippet] = useMutation(DELETE_SNIPPET, {
     update(cache, { data: { deleteSnippet } }) {
       cache.modify({
         fields: {
-          me(existingRef = [], { readField }) {
+          me(existingRef, { readField }) {
+            if (!Array.isArray(existingRef)) {
+              return existingRef;
+            }
             return existingRef.filter((ref) => readField('_id', ref) !== deleteSnippet._id);
           },
         },
       });
     },
+    refetchQueries: [{ query: QUERY_ME }],
   });
 
-  const [updateSnippet] = useMutation(UPDATE_SNIPPET);
+  const [updateSnippet] = useMutation(UPDATE_SNIPPET, {
+    refetchQueries: [{ query: QUERY_ME }],
+  });
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, checked } = event.target;
+  
+    // If the input is a checkbox, handle the 'checked' value
+    const inputValue = type === 'checkbox' ? checked : value;
+  
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: inputValue,
+    }));
   };
+  
 
   const handleAddSnippet = () => {
     setCurrentAction('add');
@@ -56,6 +84,8 @@ const SnippetList = () => {
       description: '',
       language: '',
       code: '',
+      tags: '',
+      private: false, // Set the initial value for the 'private' field
     });
   };
 
@@ -75,16 +105,36 @@ const SnippetList = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  // State to keep track of copied snippets
+  const [copiedSnippetId, setCopiedSnippetId] = useState(null);
+
+  const handleCopySnippet = (snippetId) => {
+    const snippetToCopy = snippets.find((snippet) => snippet._id === snippetId);
+    if (snippetToCopy) {
+      navigator.clipboard.writeText(snippetToCopy.code)
+        .then(() => {
+          setCopiedSnippetId(snippetId); // Set the snippet ID as copied
+          setTimeout(() => {
+            setCopiedSnippetId(null); // Reset the copied snippet ID after 2.5 seconds
+          }, 2500);
+        })
+        .catch((error) => {
+          console.error('Failed to copy code snippet:', error);
+          alert('Failed to copy code snippet. Please try again.');
+        });
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (currentAction === 'add') {
-      addSnippet({
+      await addSnippet({
         variables: { ...formData },
       });
     } else if (currentAction === 'update') {
-      updateSnippet({
-        variables: { snippetId: snippets[0]._id, ...formData }, // Assuming you want to update the first snippet in the list
+      await updateSnippet({
+        variables: { snippetId: snippets[0]._id, ...formData },
       });
     }
 
@@ -102,27 +152,65 @@ const SnippetList = () => {
         <Alert variant="info">You haven't added any snippets yet.</Alert>
       ) : (
         <ul>
-          {snippets.map((snippet) => (
-            <li key={snippet._id} className="snippet-item">
-              <h4>{snippet.title}</h4>
-              <p>{snippet.description}</p>
-              <p>Language: {snippet.language}</p>
-              <p>Code:</p>
-              <pre>{snippet.code}</pre>
-              <Button variant="primary" onClick={() => handleEditSnippet(snippet)}>
-                Edit
-              </Button>
-              <Button variant="danger" onClick={() => handleDeleteSnippet(snippet._id)}>
-                Delete
-              </Button>
-            </li>
-          ))}
-        </ul>
+        {snippets.length === 0 ? (
+          <Alert variant="info">You haven't added any snippets yet.</Alert>
+        ) : (
+          snippets.map((snippet) => {
+            // Convert tags to an array by splitting the tags string
+            const tagsArray = Array.isArray(snippet.tags) ? snippet.tags : splitTags(snippet.tags);
+  
+            return (
+              <li key={snippet._id} className="snippet-item">
+                <div className="snippet-header"> {/* Add a div to wrap the snippet header */}
+                  <h4 className="snippet-title">
+                    {snippet.title} {snippet.private ? '(Private)' : '(Public)'}
+                  </h4>
+                  <p className="snippet-description">{snippet.description}</p>
+                </div>
+                <p>Language: {snippet.language}</p>
+                <p>Code:</p>
+                <SyntaxHighlighter language={snippet.language} style={tomorrow}>
+                  {snippet.code}
+                </SyntaxHighlighter>
+
+
+                <div className="tags-container">
+                  <h5>Tags:</h5>
+                  {tagsArray.length > 0 ? (
+                    <ul className="tags-list">
+                      {tagsArray.map((tag, index) => (
+                        <li key={index} className="tag-item">
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No tags available.</p>
+                  )}
+                </div>
+
+                    <div className="fancyButtons">
+                <Button variant="primary" onClick={() => handleEditSnippet(snippet)}>
+                  Edit
+                </Button>
+                <Button variant="danger" onClick={() => handleDeleteSnippet(snippet._id)}>
+                  Delete
+                </Button>
+                <Button variant="info" onClick={() => handleCopySnippet(snippet._id)}>
+                  {copiedSnippetId === snippet._id ? 'Copied' : 'Copy'}
+                </Button>
+                </div>
+              </li>
+            );
+          })
+        )}
+      </ul>
+  
+  
       )}
 
-      {/* Add new snippet form */}
-      {currentAction === 'add' && (
-        <form onSubmit={handleSubmit}>
+      {currentAction === 'add' ? ( // Conditionally render the form when adding a snippet
+        <form className="form-container" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="title">Title</label>
             <input type="text" name="title" value={formData.title} onChange={handleInputChange} />
@@ -138,25 +226,49 @@ const SnippetList = () => {
           </div>
           <div>
             <label htmlFor="language">Language</label>
+            <select name="language" value={formData.language} onChange={handleInputChange}>
+              <option value="">Select a language</option>
+              {commonLanguages.map((lang) => (
+                <option key={lang} value={lang}>
+                  {lang}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="tags">Tags</label>
+            <input type="text" name="tags" value={formData.tags} onChange={handleInputChange} />
+          </div>
+
+          <div>
+            <label htmlFor="code">Code</label>
+            <textarea
+              name="code"
+              value={formData.code}
+              onChange={handleInputChange}
+              rows={10} // You can adjust the number of rows as needed
+            />
+          </div>
+
+          <div>
+            <label htmlFor="private">Private</label>
             <input
-              type="text"
-              name="language"
-              value={formData.language}
+              type="checkbox"
+              name="private"
+              checked={formData.private}
               onChange={handleInputChange}
             />
           </div>
-          <div>
-            <label htmlFor="code">Code</label>
-            <textarea name="code" value={formData.code} onChange={handleInputChange} />
-          </div>
+
           <Button type="submit">Submit</Button>
         </form>
+      ) : (
+        // Show the "Add Snippet" button when not adding a snippet
+        <Button className="add-snippet-button" variant="success" onClick={handleAddSnippet}>
+          Add Snippet
+        </Button>
       )}
-
-      {/* Button to add a new snippet */}
-      <Button variant="success" onClick={handleAddSnippet}>
-        Add Snippet
-      </Button>
     </div>
   );
 };

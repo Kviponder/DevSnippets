@@ -13,7 +13,9 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/">DevSnippets</Link>
+        <a href="https://github.com/Kviponder/DevSnippets" target="_blank" rel="noopener noreferrer">
+          DevSnippets
+        </a>
       </div>
       <ul className="nav-links">
         <li>
@@ -21,9 +23,9 @@ const Navbar = () => {
         </li>
         {Auth.loggedIn() ? (
           <>
-          <li>
-            <Link to="/snippets" className="nav-link">My Snippets</Link>
-          </li>
+            <li>
+              <Link to="/snippets" className="nav-link">My Snippets</Link>
+            </li>
             {/* Show logout button if user is logged in */}
             <li>
               <Button variant="gold" className="nav-link" onClick={handleLogout}>

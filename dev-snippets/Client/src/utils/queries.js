@@ -53,8 +53,6 @@ export const ADD_SNIPPET = gql`
       private
       user {
         _id
-        username
-        email
       }
     }
   }
@@ -80,8 +78,6 @@ export const UPDATE_SNIPPET = gql`
       private
       user {
         _id
-        username
-        email
       }
     }
   }

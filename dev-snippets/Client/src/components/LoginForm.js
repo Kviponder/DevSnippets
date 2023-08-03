@@ -54,24 +54,26 @@ const LoginForm = () => {
       <h1 className="login-title">Welcome to the Login Page</h1>
       <Form className="login-form" onSubmit={handleFormSubmit}>
         <Form.Group controlId="email">
-          <Form.Label>Email:</Form.Label>
+          <Form.Label className="form-label">Email:</Form.Label>
           <Form.Control
             type="text"
             value={email}
             onChange={handleEmailChange}
             required
+            className="form-control"
           />
         </Form.Group>
         <Form.Group controlId="password">
-          <Form.Label>Password:</Form.Label>
+          <Form.Label className="form-label">Password:</Form.Label>
           <Form.Control
             type="password"
             value={password}
             onChange={handlePasswordChange}
             required
+            className="form-control"
           />
         </Form.Group>
-        {showAlert && <Alert variant="danger">Invalid credentials!</Alert>}
+        {showAlert && <Alert variant="danger" className="alert-danger">Invalid credentials!</Alert>}
         <Button
           type="submit"
           variant="gold"
