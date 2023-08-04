@@ -17,6 +17,22 @@ const SnippetList = () => {
   const userData = data ? data.me : {};
   const user = userData;
   const snippets = user ? user.snippets || [] : [];
+  const [editingSnippetId, setEditingSnippetId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+
+
+
+  //Form Errors
+  const [formErrors, setFormErrors] = useState({
+    title: "",
+    description: "",
+    language: "",
+    code: "",
+    tags: "",
+  });
+
+
 
   // Function to split the tags string into an array of tags
   const splitTags = (tags) => {
@@ -29,7 +45,7 @@ const SnippetList = () => {
     description: "",
     language: "",
     code: "",
-    tags: "",
+    tags: [],
     private: false,
   });
 
@@ -68,6 +84,18 @@ const SnippetList = () => {
   });
 
   const [updateSnippet] = useMutation(UPDATE_SNIPPET, {
+    update(cache, { data: { updateSnippet } }) {
+      cache.modify({
+        fields: {
+          me(existingRef = []) {
+            if (!Array.isArray(existingRef)) {
+              existingRef = [];
+            }
+            return [...existingRef, updateSnippet];
+          },
+        },
+      });
+    },
     refetchQueries: [{ query: QUERY_ME }],
   });
 
@@ -79,7 +107,7 @@ const SnippetList = () => {
 
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: inputValue,
+      [name]: name === "tags" ? splitTags(inputValue) : inputValue, // Convert tags string to an array
     }));
   };
 
@@ -90,18 +118,25 @@ const SnippetList = () => {
       description: "",
       language: "",
       code: "",
-      tags: "",
+      tags: [],
       private: false, // Set the initial value for the 'private' field
+    });
+    setFormErrors({
+      title: "",
+      description: "",
+      language: "",
+      code: "",
+      tags: [],
     });
   };
 
   const handleEditSnippet = (snippet) => {
+    setIsEditing(true);
+    setEditingSnippetId(snippet._id);
     setCurrentAction("update");
     setFormData({
-      title: snippet.title,
-      description: snippet.description,
-      language: snippet.language,
-      code: snippet.code,
+      ...snippet,
+      tags: Array.isArray(snippet.tags) ? snippet.tags.join(", ") : "",
     });
   };
 
@@ -135,17 +170,62 @@ const SnippetList = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (currentAction === "add") {
-      await addSnippet({
-        variables: { ...formData },
-      });
-    } else if (currentAction === "update") {
-      await updateSnippet({
-        variables: { snippetId: snippets[0]._id, ...formData },
-      });
+    // Validate form fields before submission
+    let errorsExist = false;
+    const newFormErrors = {
+      title: "",
+      description: "",
+      language: "",
+      code: "",
+      tags: "",
+    };
+
+    if (formData.title.trim() === "") {
+      newFormErrors.title = "Please enter a title for the snippet.";
+      errorsExist = true;
+    }
+    if (formData.description.trim() === "") {
+      newFormErrors.description = "Please enter a description for the snippet.";
+      errorsExist = true;
+    }
+    if (formData.language.trim() === "") {
+      newFormErrors.language = "Please select a language for the snippet.";
+      errorsExist = true;
+    }
+    if (formData.code.trim() === "") {
+      newFormErrors.code = "Please enter the code for the snippet.";
+      errorsExist = true;
     }
 
-    setCurrentAction(null);
+    setFormErrors(newFormErrors);
+
+    if (!errorsExist && currentAction === "add") {
+      // Continue with snippet submission if there are no errors
+      await addSnippet({
+        variables: {
+          ...formData,
+        },
+      });
+      setCurrentAction(null);
+    } else if (!errorsExist && currentAction === "update") {
+      await updateSnippet({
+        variables: {
+          snippetId: formData._id,
+          ...formData,
+        },
+      });
+
+      setFormData({ // Reset the form data
+        title: "",
+        description: "",
+        language: "",
+        code: "",
+        tags: [],
+        private: false,
+      });
+      setIsEditing(false); // Close the editing form after submitting the changes
+      setCurrentAction(null); // Close the editing fields and reset the form data
+    }
   };
 
   if (loading) {
@@ -159,151 +239,148 @@ const SnippetList = () => {
         <Alert variant="info">You haven't added any snippets yet.</Alert>
       ) : (
         <ul>
-          {snippets.length === 0 ? (
-            <Alert variant="info">You haven't added any snippets yet.</Alert>
-          ) : (
-            snippets.map((snippet) => {
-              // Convert tags to an array by splitting the tags string
-              const tagsArray = Array.isArray(snippet.tags)
-                ? snippet.tags
-                : splitTags(snippet.tags);
+          {snippets.map((snippet) => {
+            // Convert tags to an array by splitting the tags string
+            const tagsArray = Array.isArray(snippet.tags)
+              ? snippet.tags
+              : splitTags(snippet.tags);
 
-              return (
-                <li key={snippet._id} className="snippet-item">
-                  <div className="snippet-header">
-                    {" "}
-                    {/* Add a div to wrap the snippet header */}
-                    <h4 className="snippet-title">
-                      {snippet.title}{" "}
-                      {snippet.private ? "(Private)" : "(Public)"}
-                    </h4>
-                    <p className="snippet-description">{snippet.description}</p>
-                  </div>
-                  <p>Language: {snippet.language}</p>
-                  <p>Code:</p>
-                  <SyntaxHighlighter
-                    language={snippet.language}
-                    style={tomorrow}
-                  >
-                    {snippet.code}
-                  </SyntaxHighlighter>
+            return (
+              <li key={snippet._id} className="snippet-item">
 
-                  <div className="tags-container">
-                    <h5>Tags:</h5>
-                    {tagsArray.length > 0 ? (
-                      <ul className="tags-list">
-                        {tagsArray.map((tag, index) => (
-                          <li key={index} className="tag-item">
-                            {tag}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>No tags available.</p>
-                    )}
-                  </div>
+                <div className="snippet-header">
+                  {" "}
+                  {/* Add a div to wrap the snippet header */}
+                  <h4 className="snippet-title">
+                    {snippet.title}{" "}
+                    {snippet.private ? "(Private)" : "(Public)"}
+                  </h4>
+                  <p className="snippet-description">{snippet.description}</p>
+                </div>
+                <p>Language: {snippet.language}</p>
+                <p>Code:</p>
+                <SyntaxHighlighter
+                  language={snippet.language}
+                  style={tomorrow}
+                >
+                  {snippet.code}
+                </SyntaxHighlighter>
 
-                  <div className="fancyButtons">
-                    {currentAction === "update" ? ( // Conditionally render the form when updating a snippet
-                      <form className="form-container" onSubmit={handleSubmit}>
-                        <div>
-                          <label htmlFor="title">Title</label>
-                          <input
-                            type="text"
-                            name="title"
-                            value={formData.title}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="description">Description</label>
-                          <input
-                            type="text"
-                            name="description"
-                            value={formData.description}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="language">Language</label>
-                          <select
-                            name="language"
-                            value={formData.language}
-                            onChange={handleInputChange}
-                          >
-                            <option value="">Select a language</option>
-                            {commonLanguages.map((lang) => (
-                              <option key={lang} value={lang}>
-                                {lang}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                <div className="tags-container">
+                  <h5>Tags:</h5>
+                  {tagsArray.length > 0 ? (
+                    <ul className="tags-list">
+                      {tagsArray.map((tag, index) => (
+                        <li key={index} className="tag-item">
+                          {tag}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No tags available.</p>
+                  )}
+                </div>
 
-                        <div>
-                          <label htmlFor="tags">Tags</label>
-                          <input
-                            type="text"
-                            name="tags"
-                            value={formData.tags}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-
-                        <div>
-                          <label htmlFor="code">Code</label>
-                          <textarea
-                            name="code"
-                            value={formData.code}
-                            onChange={handleInputChange}
-                            rows={10}
-                          />
-                        </div>
-
-                        <div>
-                          <label htmlFor="private">Private</label>
-                          <input
-                            type="checkbox"
-                            name="private"
-                            checked={formData.private}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <Button type="submit">Submit</Button>
-                      </form>
-                    ) : (
-                      <>
-                        <Button
-                          variant="primary"
-                          className="edit-snippet-button"
-                          onClick={() => handleEditSnippet(snippet)}
+                <div className="fancyButtons">
+                  {isEditing && editingSnippetId === snippet._id && currentAction === "update" ? ( // Conditionally render the form when updating a snippet
+                    <form className="form-container" onSubmit={handleSubmit}>
+                      <div>
+                        <label htmlFor="title">Title</label>
+                        <input
+                          type="text"
+                          name="title"
+                          value={formData.title}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="description">Description</label>
+                        <input
+                          type="text"
+                          name="description"
+                          value={formData.description}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="language">Language</label>
+                        <select
+                          name="language"
+                          value={formData.language}
+                          onChange={handleInputChange}
                         >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="danger"
-                          className="delete-snippet-button"
-                          onClick={() => handleDeleteSnippet(snippet._id)}
-                        >
-                          Delete
-                        </Button>
-                        <Button
-                          variant="info"
-                          className="copy-snippet-button"
-                          onClick={() => handleCopySnippet(snippet._id)}
-                        >
-                          {copiedSnippetId === snippet._id ? "Copied" : "Copy"}
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </li>
-              );
-            })
-          )}
+                          <option value="">Select a language</option>
+                          {commonLanguages.map((lang) => (
+                            <option key={lang} value={lang}>
+                              {lang}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label htmlFor="tags">Tags</label>
+                        <input
+                          type="text"
+                          name="tags"
+                          value={formData.tags}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="code">Code</label>
+                        <textarea
+                          name="code"
+                          value={formData.code}
+                          onChange={handleInputChange}
+                          rows={10}
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="private">Private</label>
+                        <input
+                          type="checkbox"
+                          name="private"
+                          defaultChecked={formData.private}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <Button type="submit">Submit</Button>
+                    </form>
+                  ) : (
+                    <>
+                      <Button
+                        variant="primary"
+                        className="edit-snippet-button"
+                        onClick={() => handleEditSnippet(snippet)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="danger"
+                        className="delete-snippet-button"
+                        onClick={() => handleDeleteSnippet(snippet._id)}
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        variant="info"
+                        className="copy-snippet-button"
+                        onClick={() => handleCopySnippet(snippet._id)}
+                      >
+                        {copiedSnippetId === snippet._id ? "Copied" : "Copy"}
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ul>
-      )}{" "}
-      {currentAction === "add" ? ( // Conditionally render the form when adding a snippet
+      )}
+      {currentAction === "add" ? (
         <form className="form-container" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="title">Title</label>
@@ -313,6 +390,9 @@ const SnippetList = () => {
               value={formData.title}
               onChange={handleInputChange}
             />
+            {formErrors.title && (
+              <div className="error-message">{formErrors.title}</div>
+            )}
           </div>
           <div>
             <label htmlFor="description">Description</label>
@@ -322,6 +402,9 @@ const SnippetList = () => {
               value={formData.description}
               onChange={handleInputChange}
             />
+            {formErrors.description && (
+              <div className="error-message">{formErrors.description}</div>
+            )}
           </div>
           <div>
             <label htmlFor="language">Language</label>
@@ -337,6 +420,9 @@ const SnippetList = () => {
                 </option>
               ))}
             </select>
+            {formErrors.language && (
+              <div className="error-message">{formErrors.language}</div>
+            )}
           </div>
 
           <div>
@@ -347,6 +433,9 @@ const SnippetList = () => {
               value={formData.tags}
               onChange={handleInputChange}
             />
+            {formErrors.tags && (
+              <div className="error-message">{formErrors.tags}</div>
+            )}
           </div>
 
           <div>
@@ -357,6 +446,9 @@ const SnippetList = () => {
               onChange={handleInputChange}
               rows={10} // You can adjust the number of rows as needed
             />
+            {formErrors.code && (
+              <div className="error-message">{formErrors.code}</div>
+            )}
           </div>
 
           <div>
