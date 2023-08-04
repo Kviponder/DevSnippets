@@ -12,6 +12,8 @@ const SignupForm = () => {
   });
 
   const [addUser, { error }] = useMutation(ADD_USER);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -29,9 +31,14 @@ const SignupForm = () => {
 
       // Reset the form after successful submission
       setFormData({ username: '', email: '', password: '' });
+
+      // Set the success message
+      setSuccessMessage('User created successfully!');
+      setErrorMessage('');
     } catch (error) {
       // Handle any errors that occur during the mutation
-      console.error('Error creating user:', error.message);
+      setErrorMessage('Error creating user: ' + error.message);
+      setSuccessMessage('');
     }
   };
 
@@ -73,6 +80,8 @@ const SignupForm = () => {
           />
         </Form.Group>
         {error && <Alert variant="danger" className="alert-danger">{error.message}</Alert>}
+        {successMessage && <Alert variant="success" className="alert-success">{successMessage}</Alert>}
+        {errorMessage && <Alert variant="danger" className="alert-danger">{errorMessage}</Alert>}
         <Button type="submit" variant="gold" className="signup-button">
           Sign Up
         </Button>
