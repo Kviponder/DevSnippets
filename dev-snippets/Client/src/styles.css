@@ -200,6 +200,24 @@ body {
   padding-bottom: 10px;
 }
 
+.edit-snippet-button,
+.delete-snippet-button,
+.copy-snippet-button {
+  margin-right: 10px;
+  font-size: 16px;
+  border: 2px solid var(--gold);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  background-color: var(--gold);
+  color: var(--black);
+}
+.edit-snippet-button:hover,
+.delete-snippet-button:hover,
+.copy-snippet-button:hover {
+  background-color: #ffd200; /* Change to a lighter gold color on hover */
+  color: var(--black);
+}
+
 /* Home.css */
 
 /* Center the content of the Home component */
