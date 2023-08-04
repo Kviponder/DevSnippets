@@ -26,6 +26,10 @@ body {
   text-decoration: none;
 }
 
+.logo a:hover {
+  text-shadow: 0 2px 4px #ffffff80; /* Add a gold box shadow to the logo on hover */
+}
+
 .nav-links {
   list-style: none;
   display: flex;
@@ -44,7 +48,7 @@ body {
 }
 
 .nav-link:hover {
-  color: #ffd200; /* Change to a lighter gold color on hover */
+  color: #766000; /* Change to a lighter gold color on hover */
 }
 
 /* Container styles */
@@ -196,7 +200,6 @@ body {
   padding-bottom: 10px;
 }
 
-
 /* Home.css */
 
 /* Center the content of the Home component */
@@ -216,17 +219,22 @@ body {
 .home-title {
   font-size: 100px;
   font-weight: bold;
-  color: var(--gold); /* Assuming you want to use the same gold color as in the rest of the application */
+  color: var(
+    --gold
+  ); /* Assuming you want to use the same gold color as in the rest of the application */
   margin-bottom: 10px;
+  text-shadow: 0 2px 4px #ffffff80; /* Add a gold box shadow to the title */
 }
 
 /* Style for the home subtitle */
 .home-subtitle {
   font-size: 25px;
   font-style: italic;
-  color: var(--gold); /* Assuming you want to use the same gold color as in the rest of the application */
+  color: var(
+    --gold
+  ); /* Assuming you want to use the same gold color as in the rest of the application */
+  text-shadow: 0 2px 4px #ffffff80; /* Add a gold box shadow to the title */
 }
-
 
 /* LoginForm.css */
 
@@ -302,7 +310,6 @@ body {
   color: var(--black);
 }
 
-
 /* SignupForm.css */
 
 /* Style for the signup container */
@@ -377,7 +384,6 @@ body {
   color: var(--black);
 }
 
-
 /* Animation for the home title */
 @keyframes fadeInUp {
   0% {
@@ -414,7 +420,8 @@ body {
 
 /* Animation for the home title - "jump" effect */
 @keyframes jump {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
