@@ -9,22 +9,24 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState('');
+  
   const [loginUser, { loading }] = useMutation(LOGIN_USER);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
+    setShowAlert(false); // Hide any previous error messages when the user starts typing
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+    setShowAlert(false); // Hide any previous error messages when the user starts typing
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      console.log(email + " " + password);
       const { data } = await loginUser({
         variables: {
           email: email,
@@ -38,10 +40,13 @@ const LoginForm = () => {
         Auth.login(data.login.token);
       } else {
         // If the token is not returned, display an error message
+        setErrorMessage('Invalid credentials! Please check your email and password.');
         setShowAlert(true);
       }
     } catch (err) {
       console.error(err);
+      setErrorMessage('An error occurred while logging in. Please try again later.');
+      setShowAlert(true);
     }
 
     // Clear form values
@@ -73,7 +78,7 @@ const LoginForm = () => {
             className="form-control"
           />
         </Form.Group>
-        {showAlert && <Alert variant="danger" className="alert-danger">Invalid credentials!</Alert>}
+        {showAlert && <Alert variant="danger" className="alert-danger">{errorMessage}</Alert>}
         <Button
           type="submit"
           variant="gold"

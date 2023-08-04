@@ -420,6 +420,14 @@ body {
   animation: jump 5s ease infinite;
 }
 
+
+/* styles.css */
+.alert-success {
+  background-color: #d4edda; /* Replace with the desired green color code */
+  color: #155724; /* Replace with the desired text color for success message */
+}
+
+
 /* Animation for the home title - "wiggle" effect */
 @keyframes wiggle {
   0% {
