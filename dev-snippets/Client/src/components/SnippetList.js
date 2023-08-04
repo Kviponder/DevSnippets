@@ -275,18 +275,21 @@ const SnippetList = () => {
                       <>
                         <Button
                           variant="primary"
+                          className="edit-snippet-button"
                           onClick={() => handleEditSnippet(snippet)}
                         >
                           Edit
                         </Button>
                         <Button
                           variant="danger"
+                          className="delete-snippet-button"
                           onClick={() => handleDeleteSnippet(snippet._id)}
                         >
                           Delete
                         </Button>
                         <Button
                           variant="info"
+                          className="copy-snippet-button"
                           onClick={() => handleCopySnippet(snippet._id)}
                         >
                           {copiedSnippetId === snippet._id ? "Copied" : "Copy"}
