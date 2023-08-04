@@ -23,7 +23,7 @@ const SnippetSchema = new Schema(
       trim: true,
     },
     tags: {
-      type: String,
+      type: [String],
       trim: true,
     },
     user: {
