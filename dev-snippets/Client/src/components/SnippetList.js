@@ -251,7 +251,7 @@ const SnippetList = () => {
                         </div>
 
                         <div>
-                          <label htmlFor="code">Code</label>
+                          <label className="code" htmlFor="code">Code</label>
                           <textarea
                             name="code"
                             value={formData.code}
@@ -269,7 +269,7 @@ const SnippetList = () => {
                             onChange={handleInputChange}
                           />
                         </div>
-                        <Button type="submit">Submit</Button>
+                        <Button className="submitBtn" type="submit">Submit</Button>
                       </form>
                     ) : (
                       <>
@@ -366,7 +366,7 @@ const SnippetList = () => {
             />
           </div>
 
-          <Button type="submit">Submit</Button>
+          <Button className="submitBtn" type="submit">Submit</Button>
         </form>
       ) : (
         // Show the "Add Snippet" button when not adding a snippet

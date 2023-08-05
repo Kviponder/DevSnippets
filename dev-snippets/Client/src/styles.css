@@ -1,13 +1,23 @@
 /* Global styles */
 :root {
-  --black: #000000;
-  --gold: #ffd700;
+  --black: #232323;
+  --gold: #FFD369;
 }
 
 body {
   background-color: var(--black);
   color: var(--gold);
 }
+
+hr {
+  border: none;
+  height: 5px;
+  background-color: var(--gold);
+  margin: 20px 0;
+  position: relative;
+  box-shadow: 0 0 5px var(--gold); /* Add the box shadow */
+}
+
 
 /* Navbar styles */
 .navbar {
@@ -27,7 +37,7 @@ body {
 }
 
 .logo a:hover {
-  text-shadow: 0 2px 4px #ffffff80; /* Add a gold box shadow to the logo on hover */
+  text-shadow: 0 2px 4px #9c912a; /* Add a gold box shadow to the logo on hover */
 }
 
 .nav-links {
@@ -48,7 +58,7 @@ body {
 }
 
 .nav-link:hover {
-  color: #766000; /* Change to a lighter gold color on hover */
+  color: #9c912a; /* Change to a lighter gold color on hover */
 }
 
 /* Container styles */
@@ -58,6 +68,9 @@ body {
   padding: 2rem;
   border: 2px solid var(--gold);
   border-radius: 10px;
+
+  
+  
 }
 
 /* Snippet item styles */
@@ -122,6 +135,20 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 5px;
 }
+.submitBtn {
+  grid-column: span 2; 
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem; 
+}
+.code {
+  grid-column: span 2; /* Make the code label span across both columns */
+  
+}
+
+textarea {
+  width: 500px;
+}
 
 .add-snippet-button {
   margin-top: 1rem;
@@ -183,6 +210,7 @@ body {
   margin-bottom: 5px;
   font-weight: bold;
   text-transform: capitalize;
+  
 }
 
 /* Style for the snippet description */
@@ -223,7 +251,7 @@ body {
     --gold
   ); /* Assuming you want to use the same gold color as in the rest of the application */
   margin-bottom: 10px;
-  text-shadow: 0 2px 4px #ffffff80; /* Add a gold box shadow to the title */
+  text-shadow: 0 2px 4px #FFF7D4; /* Add a gold box shadow to the title */
 }
 
 /* Style for the home subtitle */
@@ -233,7 +261,7 @@ body {
   color: var(
     --gold
   ); /* Assuming you want to use the same gold color as in the rest of the application */
-  text-shadow: 0 2px 4px #ffffff80; /* Add a gold box shadow to the title */
+  text-shadow: 0 2px 4px #FFF7D4; /* Add a gold box shadow to the title */
 }
 
 /* LoginForm.css */
@@ -383,6 +411,7 @@ body {
   background-color: #ffd200; /* Change to a lighter gold color on hover */
   color: var(--black);
 }
+
 
 /* Animation for the home title */
 @keyframes fadeInUp {
