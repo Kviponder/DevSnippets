@@ -6,6 +6,7 @@ function Home() {
     <div className="home-container">
       <div className="home-content">
         <h1 className="home-title">Welcome to DevSnippets</h1>
+        <hr/>
         <p className="home-subtitle">Your one-stop solution for saving code snippets!</p>
       </div>
     </div>

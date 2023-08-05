@@ -82,7 +82,7 @@ const LoginForm = () => {
         <Button
           type="submit"
           variant="gold"
-          className="login-button"
+          className="login-button buttons"
           disabled={loading}
         >
           {loading ? 'Logging in...' : 'Login'}
