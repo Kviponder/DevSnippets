@@ -74,6 +74,7 @@ hr{
   padding: 1rem;
   border: 1px solid var(--gold);
   border-radius: 5px;
+  list-style: none;
 }
 
 .snippet-item p {
