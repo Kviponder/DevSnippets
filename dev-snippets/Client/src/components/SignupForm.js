@@ -44,7 +44,7 @@ const SignupForm = () => {
 
   return (
     <div className="signup-container">
-      <h1 className="signup-title">Sign Up</h1>
+      <h1 className="signup-title ">Sign Up</h1>
       <Form className="signup-form" onSubmit={handleSubmit}>
         <Form.Group controlId="username">
           <Form.Label className="form-label">Username</Form.Label>
@@ -82,7 +82,7 @@ const SignupForm = () => {
         {error && <Alert variant="danger" className="alert-danger">{error.message}</Alert>}
         {successMessage && <Alert variant="success" className="alert-success">{successMessage}</Alert>}
         {errorMessage && <Alert variant="danger" className="alert-danger">{errorMessage}</Alert>}
-        <Button type="submit" variant="gold" className="signup-button">
+        <Button type="submit" variant="gold" className="signup-button buttons">
           Sign Up
         </Button>
       </Form>

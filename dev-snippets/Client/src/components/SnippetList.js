@@ -235,6 +235,7 @@ const SnippetList = () => {
   return (
     <div className="snippet-list">
       <h3>My Snippets</h3>
+      <hr/>
       {snippets.length === 0 ? (
         <Alert variant="info">You haven't added any snippets yet.</Alert>
       ) : (
@@ -347,27 +348,27 @@ const SnippetList = () => {
                           onChange={handleInputChange}
                         />
                       </div>
-                      <Button type="submit">Submit</Button>
+                      <Button  className='buttons' type="submit">Submit</Button>
                     </form>
                   ) : (
                     <>
                       <Button
                         variant="primary"
-                        className="edit-snippet-button"
+                        className="edit-snippet-button buttons"
                         onClick={() => handleEditSnippet(snippet)}
                       >
                         Edit
                       </Button>
                       <Button
                         variant="danger"
-                        className="delete-snippet-button"
+                        className="delete-snippet-button buttons"
                         onClick={() => handleDeleteSnippet(snippet._id)}
                       >
                         Delete
                       </Button>
                       <Button
                         variant="info"
-                        className="copy-snippet-button"
+                        className="copy-snippet-button buttons"
                         onClick={() => handleCopySnippet(snippet._id)}
                       >
                         {copiedSnippetId === snippet._id ? "Copied" : "Copy"}
@@ -461,7 +462,7 @@ const SnippetList = () => {
             />
           </div>
 
-          <Button type="submit">Submit</Button>
+          <Button className='buttons' type="submit">Submit</Button>
         </form>
       ) : (
         // Show the "Add Snippet" button when not adding a snippet

@@ -2,10 +2,18 @@
 :root {
   --black: #000000;
   --gold: #ffd700;
+  --grey: #1259ab;
 }
+
+
+
 
 body {
   background-color: var(--black);
+  color: var(--gold);
+}
+
+hr{
   color: var(--gold);
 }
 
@@ -85,10 +93,19 @@ body {
 /* Form styles */
 .form-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 1rem;
   margin-top: 1rem;
   /* Add some top margin to separate the form from the snippets list */
+  
+}
+.form-container textarea {
+  width: 100%; /* Make the textarea fill the entire div/form */
+  resize: vertical; /* Allow vertical resizing */
+}
+.form-container .buttons:hover {
+  background-color: #ffd200; /* Lighter gold color on hover */
+  color: var(--black);
 }
 
 .form-container label {
@@ -96,6 +113,11 @@ body {
   font-weight: bold;
   color: var(--gold);
   display: block;
+}
+
+p,
+option {
+  width: 100%; /* Both p and option will take the full width available */
 }
 
 .form-container .form-control {
@@ -123,12 +145,43 @@ body {
   border-radius: 5px;
 }
 
+
 .add-snippet-button {
-  margin-top: 1rem;
+  display: inline-block;
   font-size: 1.2rem;
-  border: 2px solid var(--gold);
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border: 2px solid #C07F00;
+  border-radius: 10px;
+  background-image: linear-gradient(to right, #FFD95A, #FFF7D4);
+  color: #272829;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.add-snippet-button:hover{
+  background-image: linear-gradient(to right, #FFEA20, #FFF7D4);
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.buttons{
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border: 2px solid #C07F00;
+  border-radius: 10px;
+  background-image: linear-gradient(to right, #FFD95A, #FFF7D4);
+  color: #272829;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.buttons:hover{
+  background-image: linear-gradient(to right, #FFEA20, #FFF7D4);
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Alert styles */

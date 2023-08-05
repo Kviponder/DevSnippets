@@ -17,6 +17,7 @@ const Navbar = () => {
         <a href="https://github.com/Kviponder/DevSnippets" target="_blank" rel="noopener noreferrer">
           DevSnippets
         </a>
+        <hr/>
       </div>
       <ul className="nav-links">
         <li>
