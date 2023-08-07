@@ -23,6 +23,6 @@
     "react-syntax-highlighter": "^15.5.0"
   },
   "engines": {
-    "node": "16.x"
+    "node": "16.20.0"
   }
 }
