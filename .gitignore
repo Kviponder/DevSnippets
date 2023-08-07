@@ -1,11 +1,10 @@
 # Ignore node_modules in the root directory
-/dev-snippets/node_modules
-/dev-snippets/package-lock.json
-
+/node_modules
+/package-lock.json
 # Ignore node_modules in the Client directory
-/dev-snippets/Client/node_modules
-/dev-snippets/Client/package-lock.json
+/client/node_modules
+/client/package-lock.json
 
 # Ignore node_modules in the Server directory
-/dev-snippets/Server/node_modules
-/dev-snippets/Server/package-lock.json
+/server/node_modules
+/server/package-lock.json
