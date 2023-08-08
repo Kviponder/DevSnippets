@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Alert, Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
-import { LOGIN_USER } from '../utils/queries';
+import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 import '../styles.css'; // Import the styles.css file
 
