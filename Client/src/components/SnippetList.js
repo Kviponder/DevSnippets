@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
+import { QUERY_ME } from "../utils/queries";
 import {
-  QUERY_ME,
   ADD_SNIPPET,
   DELETE_SNIPPET,
   UPDATE_SNIPPET,
-} from "../utils/queries";
+} from "../utils/mutations";
 import { Alert, Button } from "react-bootstrap";
 import "../styles.css";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -20,9 +20,6 @@ const SnippetList = () => {
   const [editingSnippetId, setEditingSnippetId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
-
-
-
   //Form Errors
   const [formErrors, setFormErrors] = useState({
     title: "",
@@ -31,8 +28,6 @@ const SnippetList = () => {
     code: "",
     tags: "",
   });
-
-
 
   // Function to split the tags string into an array of tags
   const splitTags = (tags) => {
@@ -215,7 +210,8 @@ const SnippetList = () => {
         },
       });
 
-      setFormData({ // Reset the form data
+      setFormData({
+        // Reset the form data
         title: "",
         description: "",
         language: "",
@@ -235,7 +231,7 @@ const SnippetList = () => {
   return (
     <div className="snippet-list">
       <h3>My Snippets</h3>
-      <hr/>
+      <hr />
       {snippets.length === 0 ? (
         <Alert variant="info">You haven't added any snippets yet.</Alert>
       ) : (
@@ -248,22 +244,17 @@ const SnippetList = () => {
 
             return (
               <li key={snippet._id} className="snippet-item">
-
                 <div className="snippet-header">
                   {" "}
                   {/* Add a div to wrap the snippet header */}
                   <h4 className="snippet-title">
-                    {snippet.title}{" "}
-                    {snippet.private ? "(Private)" : "(Public)"}
+                    {snippet.title} {snippet.private ? "(Private)" : "(Public)"}
                   </h4>
                   <p className="snippet-description">{snippet.description}</p>
                 </div>
                 <p>Language: {snippet.language}</p>
                 <p>Code:</p>
-                <SyntaxHighlighter
-                  language={snippet.language}
-                  style={tomorrow}
-                >
+                <SyntaxHighlighter language={snippet.language} style={tomorrow}>
                   {snippet.code}
                 </SyntaxHighlighter>
 
@@ -283,7 +274,9 @@ const SnippetList = () => {
                 </div>
 
                 <div className="fancyButtons">
-                  {isEditing && editingSnippetId === snippet._id && currentAction === "update" ? ( // Conditionally render the form when updating a snippet
+                  {isEditing &&
+                  editingSnippetId === snippet._id &&
+                  currentAction === "update" ? ( // Conditionally render the form when updating a snippet
                     <form className="form-container" onSubmit={handleSubmit}>
                       <div>
                         <label htmlFor="title">Title</label>
@@ -348,7 +341,9 @@ const SnippetList = () => {
                           onChange={handleInputChange}
                         />
                       </div>
-                      <Button  className='buttons' type="submit">Submit</Button>
+                      <Button className="buttons" type="submit">
+                        Submit
+                      </Button>
                     </form>
                   ) : (
                     <>
@@ -462,7 +457,9 @@ const SnippetList = () => {
             />
           </div>
 
-          <Button className='buttons' type="submit">Submit</Button>
+          <Button className="buttons" type="submit">
+            Submit
+          </Button>
         </form>
       ) : (
         // Show the "Add Snippet" button when not adding a snippet
