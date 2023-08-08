@@ -1,5 +1,5 @@
 # DevSnippets
-![License](https://img.shields.io/badge/license-None-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 ## Description
 DevSnippets is an app where you can post and save your code snippets for later use. Users can also provide comments and advice on the posted snippets, helping each other to improve and learn.
 
